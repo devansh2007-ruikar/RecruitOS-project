@@ -89,6 +89,42 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
+  // Verify explicit coordinator authorization in database
+  const { data: isCoordinator } = await supabase.rpc("is_coordinator", {
+    p_user_id: user.id,
+  });
+
+  if (!isCoordinator) {
+    return (
+      <div className="min-h-full flex flex-col items-center justify-center p-6 bg-[var(--color-bg)]">
+        <div className="max-w-md w-full p-8 rounded-xl border border-red-300 bg-red-50 dark:bg-red-950/40 dark:border-red-800 text-center space-y-4">
+          <div className="w-12 h-12 mx-auto rounded-full bg-red-100 dark:bg-red-900/60 flex items-center justify-center text-red-600 dark:text-red-300">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h2 className="text-lg font-semibold text-red-900 dark:text-red-200">
+            Coordinator Access Required
+          </h2>
+          <p className="text-sm text-red-700 dark:text-red-300">
+            Account <strong>{user.email}</strong> is not registered as an authorized coordinator.
+            Only chapter coordinators can view candidate records and manage applications.
+          </p>
+          <div className="pt-2 flex justify-center">
+            <form action={logoutAction}>
+              <button
+                type="submit"
+                className="h-9 px-4 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-xs font-medium hover:bg-[var(--color-bg)] transition-colors"
+              >
+                Sign In with Another Account
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-full flex flex-col">
       {/* Top bar */}

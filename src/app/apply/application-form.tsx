@@ -142,7 +142,7 @@ export default function ApplicationForm() {
           setErrors(flat);
         }
       }
-    } catch (err) {
+    } catch {
       setSubmitError("An unexpected error occurred. Please try again.");
     } finally {
       setSubmitting(false);

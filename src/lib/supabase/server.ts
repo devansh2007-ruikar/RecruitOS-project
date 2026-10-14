@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { createClient as createSupabaseJsClient, type SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * Check if valid Supabase credentials have been configured.
@@ -69,7 +69,6 @@ export function createAdminClient(): SupabaseClient | null {
     return null;
   }
 
-  const { createClient: createSupabaseJsClient } = require("@supabase/supabase-js");
   return createSupabaseJsClient(supabaseUrl, serviceRoleKey, {
     auth: {
       autoRefreshToken: false,

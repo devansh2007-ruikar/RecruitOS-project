@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import type { Application, ApplicationStatus } from "@/lib/types";
 import { TEAMS, APPLICATION_STATUSES, STATUS_CONFIG } from "@/lib/types";
-import { StatusBadge, StatusActions } from "./status-components";
 import { FilterSelect } from "./filter-select";
+import { CandidateTable } from "./candidate-table";
 
 export const metadata: Metadata = {
   title: "Dashboard — RecruitOS",
@@ -131,122 +130,8 @@ async function DashboardContent({
         </Suspense>
       </div>
 
-      {/* Table */}
-      {candidates.length === 0 ? (
-        <div className="text-center py-16 text-[var(--color-text-muted)]">
-          <svg
-            className="mx-auto mb-3"
-            width="40"
-            height="40"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <line x1="17" y1="11" x2="23" y2="11" />
-          </svg>
-          <p className="text-sm font-medium">No applications found</p>
-          <p className="text-xs mt-1">
-            {params.search || params.team || params.status
-              ? "Try adjusting your filters."
-              : "Applications will appear here once candidates apply."}
-          </p>
-        </div>
-      ) : (
-        <div className="border border-[var(--color-border)] rounded-lg overflow-hidden bg-[var(--color-surface)]">
-          {/* Desktop table */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-[var(--color-border)] bg-[var(--color-bg)]">
-                  <th className="text-left font-medium text-xs text-[var(--color-text-muted)] uppercase tracking-wider px-4 py-3">
-                    Candidate
-                  </th>
-                  <th className="text-left font-medium text-xs text-[var(--color-text-muted)] uppercase tracking-wider px-4 py-3">
-                    Team
-                  </th>
-                  <th className="text-left font-medium text-xs text-[var(--color-text-muted)] uppercase tracking-wider px-4 py-3">
-                    Status
-                  </th>
-                  <th className="text-left font-medium text-xs text-[var(--color-text-muted)] uppercase tracking-wider px-4 py-3">
-                    Applied
-                  </th>
-                  <th className="text-left font-medium text-xs text-[var(--color-text-muted)] uppercase tracking-wider px-4 py-3">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--color-border)]">
-                {candidates.map((app) => (
-                  <tr
-                    key={app.id}
-                    className="hover:bg-[var(--color-bg)] transition-colors"
-                  >
-                    <td className="px-4 py-3">
-                      <Link
-                        href={`/dashboard/candidates/${app.id}`}
-                        className="hover:text-[var(--color-accent)] transition-colors"
-                      >
-                        <p className="font-medium">{app.name}</p>
-                        <p className="text-xs text-[var(--color-text-muted)]">
-                          {app.email}
-                        </p>
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3 text-[var(--color-text-secondary)]">
-                      {app.team}
-                    </td>
-                    <td className="px-4 py-3">
-                      <StatusBadge status={app.status} />
-                    </td>
-                    <td className="px-4 py-3 text-xs text-[var(--color-text-muted)]">
-                      {formatDate(app.created_at)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <StatusActions
-                        applicationId={app.id}
-                        currentStatus={app.status}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Mobile cards */}
-          <div className="md:hidden divide-y divide-[var(--color-border)]">
-            {candidates.map((app) => (
-              <div key={app.id} className="p-4 space-y-3">
-                <div className="flex items-start justify-between gap-2">
-                  <Link
-                    href={`/dashboard/candidates/${app.id}`}
-                    className="hover:text-[var(--color-accent)] transition-colors"
-                  >
-                    <p className="font-medium text-sm">{app.name}</p>
-                    <p className="text-xs text-[var(--color-text-muted)]">
-                      {app.email}
-                    </p>
-                  </Link>
-                  <StatusBadge status={app.status} />
-                </div>
-                <div className="flex items-center justify-between text-xs text-[var(--color-text-muted)]">
-                  <span>{app.team}</span>
-                  <span>{formatDate(app.created_at)}</span>
-                </div>
-                <StatusActions
-                  applicationId={app.id}
-                  currentStatus={app.status}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Interactive Candidate Table with Selection & Bulk Updates */}
+      <CandidateTable candidates={candidates} />
     </div>
   );
 }
@@ -268,13 +153,4 @@ export default function DashboardPage({
       <DashboardContent searchParams={searchParams} />
     </Suspense>
   );
-}
-
-function formatDate(dateStr: string): string {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
 }
