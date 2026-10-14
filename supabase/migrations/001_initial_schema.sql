@@ -109,6 +109,11 @@ begin
 end;
 $$;
 
+-- Restrict execution to SQL Editor / Admin / Service Role only
+revoke all on function public.add_coordinator(text) from public;
+revoke all on function public.add_coordinator(text) from anon;
+revoke all on function public.add_coordinator(text) from authenticated;
+
 -- 7. Triggers: Force initial 'applied' status, email normalization & updated_at
 -- ============================================================================
 create or replace function public.handle_application_insert()

@@ -20,10 +20,11 @@ create policy "Coordinators can view coordinators list"
   to authenticated
   using (auth.uid() = user_id);
 
--- Populate coordinators from existing auth.users (if any already exist)
-insert into public.coordinators (user_id, email)
-select id, email from auth.users
-on conflict (user_id) do nothing;
+-- Note on Coordinator Memberships:
+-- Blanket promotion of auth.users is removed to prevent unauthorized access.
+-- Coordinators must be authorized explicitly via public.add_coordinator('email')
+-- or via direct insert in the SQL Editor. Do not automatically delete existing
+-- coordinators without manual review.
 
 -- 2. Explicit coordinator check function (SECURITY DEFINER with safe search_path)
 -- ============================================================================
@@ -44,7 +45,7 @@ $$;
 revoke execute on function public.is_coordinator(uuid) from public;
 grant execute on function public.is_coordinator(uuid) to authenticated;
 
--- Admin helper to authorize a coordinator by email
+-- Admin helper to authorize a coordinator by email (SQL Editor / Service Role only)
 create or replace function public.add_coordinator(p_email text)
 returns jsonb
 language plpgsql
@@ -69,6 +70,11 @@ begin
   return jsonb_build_object('success', true, 'user_id', v_user_id);
 end;
 $$;
+
+-- Restrict execution to SQL Editor / Admin / Service Role only
+revoke all on function public.add_coordinator(text) from public;
+revoke all on function public.add_coordinator(text) from anon;
+revoke all on function public.add_coordinator(text) from authenticated;
 
 -- 3. Hardened Application triggers: force initial status & database-level email normalization
 -- ============================================================================
@@ -147,6 +153,9 @@ create policy "Authorized coordinators can read status history"
 
 -- 5. Hardened Single Transition Function
 -- ============================================================================
+-- Explicitly drop the legacy 3-argument function overload from Milestone 1
+drop function if exists public.transition_application_status(uuid, application_status, uuid);
+
 -- Removes caller-supplied actor_id: derives actor identity strictly from auth.uid()
 -- Checks coordinator authorization inside the function
 -- Uses safe search_path = public, pg_temp
