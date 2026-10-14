@@ -30,6 +30,11 @@ export async function loginAction(formData: FormData): Promise<LoginResult> {
   });
 
   if (error) {
+    console.error("Supabase sign-in failed", {
+      code: error.code,
+      message: error.message,
+      status: error.status,
+    });
     return { error: "Invalid credentials. Please try again." };
   }
 

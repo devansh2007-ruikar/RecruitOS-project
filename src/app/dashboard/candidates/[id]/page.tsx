@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { Application, StatusHistoryEntry, Team } from "@/lib/types";
 import { TEAM_QUESTIONS, STATUS_CONFIG } from "@/lib/types";
@@ -17,6 +18,7 @@ async function CandidateDetailContent({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await connection();
   const { id } = await params;
   const supabase = await createClient();
 

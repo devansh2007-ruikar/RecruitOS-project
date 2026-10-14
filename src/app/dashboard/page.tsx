@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { Application, ApplicationStatus } from "@/lib/types";
 import { TEAMS, APPLICATION_STATUSES, STATUS_CONFIG } from "@/lib/types";
@@ -16,6 +17,7 @@ async function DashboardContent({
 }: {
   searchParams: Promise<{ team?: string; status?: string; search?: string }>;
 }) {
+  await connection();
   const params = await searchParams;
   const supabase = await createClient();
 
