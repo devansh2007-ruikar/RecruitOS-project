@@ -14,9 +14,9 @@ export function StatusBadge({ status }: { status: ApplicationStatus }) {
   const config = STATUS_CONFIG[status];
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium
-        border ${config.bgColor} ${config.color}`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono font-medium tracking-wide border ${config.bgColor} ${config.color}`}
     >
+      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80" aria-hidden="true" />
       {config.label}
     </span>
   );
@@ -44,7 +44,7 @@ export function StatusActions({ applicationId, currentStatus }: StatusActionsPro
 
   return (
     <div className="space-y-2">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         {transitions.map((target) => {
           const config = STATUS_CONFIG[target];
           const isReject = target === "rejected";
@@ -53,18 +53,18 @@ export function StatusActions({ applicationId, currentStatus }: StatusActionsPro
               key={target}
               onClick={() => handleTransition(target)}
               disabled={loading !== null}
-              className={`h-8 px-3 rounded-md text-xs font-medium transition-colors
-                disabled:opacity-50 disabled:cursor-not-allowed
+              className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium transition-colors
+                disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]
                 ${
                   isReject
-                    ? "border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-danger)] hover:text-[var(--color-danger)]"
-                    : `border ${config.bgColor} ${config.color} hover:opacity-80`
+                    ? "border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-danger)] hover:text-[var(--color-danger)] hover:bg-red-950/30"
+                    : "border border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:bg-[var(--color-surface)]"
                 }
               `}
             >
               {loading === target ? (
-                <span className="inline-flex items-center gap-1">
-                  <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none">
+                <span className="inline-flex items-center gap-1.5 text-[var(--color-accent)]">
+                  <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
@@ -78,7 +78,9 @@ export function StatusActions({ applicationId, currentStatus }: StatusActionsPro
         })}
       </div>
       {error && (
-        <p className="text-xs text-[var(--color-danger)]">{error}</p>
+        <p className="text-xs text-[var(--color-danger)] font-medium flex items-center gap-1">
+          <span aria-hidden="true">⚠</span> {error}
+        </p>
       )}
     </div>
   );

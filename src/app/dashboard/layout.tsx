@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
+import Image from "next/image";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -7,9 +8,9 @@ import { logoutAction } from "@/app/login/actions";
 
 function SupabaseNotConfigured() {
   return (
-    <div className="min-h-full flex flex-col items-center justify-center p-6 bg-[var(--color-bg)]">
-      <div className="max-w-lg w-full p-8 rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-700/60 text-left space-y-4">
-        <div className="flex items-center gap-2.5 text-amber-900 dark:text-amber-200">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-[var(--color-bg)]">
+      <div className="max-w-lg w-full p-8 rounded-xl border border-amber-800/80 bg-amber-950/40 text-left space-y-4 shadow-xl">
+        <div className="flex items-center gap-2.5 text-amber-200">
           <svg
             width="20"
             height="20"
@@ -26,46 +27,45 @@ function SupabaseNotConfigured() {
           </svg>
           <h2 className="text-base font-semibold">Supabase Configuration Required</h2>
         </div>
-        <p className="text-sm text-amber-800 dark:text-amber-300">
+        <p className="text-sm text-amber-300 leading-relaxed">
           The coordinator dashboard requires a connected Supabase project for PostgreSQL persistence and coordinator authentication.
         </p>
-        <div className="space-y-2 text-xs text-amber-900 dark:text-amber-200">
-          <p className="font-semibold uppercase tracking-wider">Required Setup Steps:</p>
-          <ol className="list-decimal list-inside space-y-1.5 pl-1 leading-relaxed">
+        <div className="space-y-2 text-xs text-amber-200">
+          <p className="font-semibold uppercase tracking-wider font-mono">Required Setup Steps:</p>
+          <ol className="list-decimal list-inside space-y-1.5 pl-1 leading-relaxed text-amber-300">
             <li>
               Create a project at{" "}
               <a
                 href="https://supabase.com/dashboard"
                 target="_blank"
                 rel="noreferrer"
-                className="underline font-semibold"
+                className="underline font-semibold text-amber-100"
               >
                 supabase.com
               </a>
             </li>
             <li>
-              Fill in credentials in <code className="bg-amber-100 dark:bg-amber-900/60 px-1.5 py-0.5 rounded font-mono">.env.local</code>:
-              <div className="mt-1.5 p-2.5 rounded bg-amber-100/90 dark:bg-amber-900/40 font-mono text-[11px] space-y-1">
+              Configure <code className="bg-amber-900/60 px-1.5 py-0.5 rounded font-mono">.env.local</code>:
+              <div className="mt-1.5 p-2.5 rounded bg-amber-950/80 font-mono text-[11px] space-y-1 text-amber-300 border border-amber-800/60">
                 <div>NEXT_PUBLIC_SUPABASE_URL=https://[project-ref].supabase.co</div>
                 <div>NEXT_PUBLIC_SUPABASE_ANON_KEY=[anon-key]</div>
                 <div>SUPABASE_SERVICE_ROLE_KEY=[service-role-key]</div>
               </div>
             </li>
             <li>
-              Execute migration: run SQL from{" "}
-              <code className="bg-amber-100 dark:bg-amber-900/60 px-1.5 py-0.5 rounded font-mono">supabase/migrations/001_initial_schema.sql</code> in the SQL Editor
+              Execute schema migrations in the Supabase SQL Editor.
             </li>
             <li>
-              Add a coordinator in Supabase (Authentication &rarr; Users &rarr; Add User)
+              Add a coordinator in Supabase Authentication &rarr; Users.
             </li>
           </ol>
         </div>
         <div className="pt-2">
           <Link
             href="/"
-            className="inline-flex items-center justify-center h-9 px-4 rounded-lg bg-[var(--color-accent)] text-white text-xs font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
+            className="inline-flex items-center justify-center min-h-[44px] px-5 rounded-lg bg-[var(--color-accent)] text-[var(--color-accent-fg)] text-xs font-semibold hover:bg-[var(--color-accent-hover)] transition-colors"
           >
-            Back to Home
+            Back to Chapter Home
           </Link>
         </div>
       </div>
@@ -75,22 +75,22 @@ function SupabaseNotConfigured() {
 
 function DashboardLayoutSkeleton() {
   return (
-    <div className="min-h-full flex flex-col animate-pulse">
+    <div className="min-h-screen flex flex-col bg-[var(--color-bg)] animate-pulse">
       <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-[var(--color-accent)] opacity-60" />
-            <div className="h-4 w-20 bg-[var(--color-border)] rounded" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[var(--color-surface-raised)] border border-[var(--color-border)]" />
+            <div className="h-4 w-28 bg-[var(--color-border)] rounded" />
           </div>
           <div className="flex items-center gap-3">
-            <div className="h-4 w-32 bg-[var(--color-border)] rounded hidden sm:inline-block" />
-            <div className="h-8 w-16 bg-[var(--color-border)] rounded" />
+            <div className="h-4 w-36 bg-[var(--color-border)] rounded hidden sm:inline-block" />
+            <div className="h-9 w-20 bg-[var(--color-border)] rounded" />
           </div>
         </div>
       </header>
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-4">
-        <div className="h-8 w-40 bg-[var(--color-surface)] border border-[var(--color-border)] rounded" />
-        <div className="h-64 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]" />
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <div className="h-8 w-48 bg-[var(--color-surface)] border border-[var(--color-border)] rounded" />
+        <div className="h-64 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)]" />
       </main>
     </div>
   );
@@ -124,25 +124,24 @@ async function DashboardAuthGate({
 
   if (!isCoordinator) {
     return (
-      <div className="min-h-full flex flex-col items-center justify-center p-6 bg-[var(--color-bg)]">
-        <div className="max-w-md w-full p-8 rounded-xl border border-red-300 bg-red-50 dark:bg-red-950/40 dark:border-red-800 text-center space-y-4">
-          <div className="w-12 h-12 mx-auto rounded-full bg-red-100 dark:bg-red-900/60 flex items-center justify-center text-red-600 dark:text-red-300">
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-[var(--color-bg)]">
+        <div className="max-w-md w-full p-8 rounded-xl border border-red-800 bg-red-950/40 text-center space-y-4 shadow-xl">
+          <div className="w-12 h-12 mx-auto rounded-full bg-red-900/60 border border-red-700 flex items-center justify-center text-red-300">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg>
           </div>
-          <h2 className="text-lg font-semibold text-red-900 dark:text-red-200">
+          <h2 className="text-xl font-semibold text-red-200 tracking-tight">
             Coordinator Access Required
           </h2>
-          <p className="text-sm text-red-700 dark:text-red-300">
-            Account <strong>{user.email}</strong> is not registered as an authorized coordinator.
-            Only chapter coordinators can view candidate records and manage applications.
+          <p className="text-sm text-red-300 leading-relaxed">
+            Account <strong className="text-red-100">{user.email}</strong> is authenticated with Supabase, but is not authorized in the coordinator registry. Only registered chapter coordinators can view candidate records and manage applications.
           </p>
           <div className="pt-2 flex justify-center">
             <form action={logoutAction}>
               <button
                 type="submit"
-                className="h-9 px-4 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-xs font-medium hover:bg-[var(--color-bg)] transition-colors"
+                className="min-h-[44px] px-5 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-sm font-medium text-[var(--color-text-primary)] hover:bg-[var(--color-surface-raised)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
               >
                 Sign In with Another Account
               </button>
@@ -154,47 +153,47 @@ async function DashboardAuthGate({
   }
 
   return (
-    <div className="min-h-full flex flex-col">
-      {/* Top bar */}
-      <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+    <div className="min-h-screen flex flex-col bg-[var(--color-bg)] text-[var(--color-text-primary)]">
+      {/* Top bar with Chapter Brand Identity */}
+      <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)]/90 backdrop-blur-md sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 text-sm font-semibold"
+              className="flex items-center gap-3 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)] rounded-lg p-1"
             >
-              <div className="w-7 h-7 rounded-md bg-[var(--color-accent)] flex items-center justify-center">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
+              <div className="w-9 h-9 rounded-lg overflow-hidden bg-black border border-[var(--color-border)] flex items-center justify-center flex-shrink-0 group-hover:border-[var(--color-border-hover)] transition-colors">
+                <Image
+                  src="/branding/blockchain-rbu.png"
+                  alt="Blockchain Students Chapter at RBU"
+                  width={36}
+                  height={36}
+                  priority
+                  className="object-contain w-full h-full"
+                />
               </div>
-              RecruitOS
+              <div className="flex flex-col">
+                <span className="font-semibold text-sm tracking-tight text-[var(--color-text-primary)]">
+                  RecruitOS
+                </span>
+                <span className="text-[11px] font-mono text-[var(--color-text-muted)]">
+                  Blockchain RBU • Workspace
+                </span>
+              </div>
             </Link>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs text-[var(--color-text-muted)] hidden sm:inline">
+            <span className="text-xs font-mono px-2.5 py-1 rounded border border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text-secondary)] hidden sm:inline-block">
               {user.email}
             </span>
             <form action={logoutAction}>
               <button
                 type="submit"
-                className="h-8 px-3 rounded-md border border-[var(--color-border)] text-xs font-medium
-                  text-[var(--color-text-secondary)] hover:bg-[var(--color-accent-light)]
-                  hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]
-                  transition-colors"
+                className="min-h-[36px] px-3.5 rounded-lg border border-[var(--color-border)] text-xs font-medium
+                  text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]
+                  hover:bg-[var(--color-surface-raised)] hover:border-[var(--color-border-hover)]
+                  transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
               >
                 Sign Out
               </button>
@@ -203,8 +202,8 @@ async function DashboardAuthGate({
         </div>
       </header>
 
-      {/* Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
+      {/* Main Workspace */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {children}
       </main>
     </div>
@@ -228,3 +227,4 @@ export default function DashboardLayout({
     </Suspense>
   );
 }
+

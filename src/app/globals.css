@@ -1,39 +1,53 @@
 @import "tailwindcss";
 
 /*
- * RecruitOS — Design system
- * Restrained, professional recruitment workspace.
- * Avoids decorative elements; focuses on clarity and contrast.
+ * RecruitOS — Blockchain Students Chapter at RBU
+ * Art Direction: "Connected people. Structured recruitment."
+ * Precise, editorial, technical workspace inspired by the chapter's geometric identity.
  */
 
 :root {
-  --color-bg: #fafafa;
-  --color-surface: #ffffff;
-  --color-border: #e5e5e5;
-  --color-text-primary: #171717;
-  --color-text-secondary: #525252;
-  --color-text-muted: #a3a3a3;
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
-  --color-accent-light: #eff6ff;
-  --color-danger: #dc2626;
-  --color-danger-hover: #b91c1c;
-}
+  /* Canvas & surfaces */
+  --color-bg: #080C10;
+  --color-surface: #111820;
+  --color-surface-raised: #18232D;
+  --color-surface-hover: #1F2C38;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0a0a0a;
-    --color-surface: #171717;
-    --color-border: #262626;
-    --color-text-primary: #fafafa;
-    --color-text-secondary: #a3a3a3;
-    --color-text-muted: #525252;
-    --color-accent: #3b82f6;
-    --color-accent-hover: #60a5fa;
-    --color-accent-light: #172554;
-    --color-danger: #ef4444;
-    --color-danger-hover: #f87171;
-  }
+  /* Borders */
+  --color-border: #202D3A;
+  --color-border-hover: #2E4052;
+  --color-border-focus: #22D3EE;
+
+  /* Text hierarchy */
+  --color-text-primary: #F4F7FA;
+  --color-text-secondary: #AAB8C5;
+  --color-text-muted: #6C8296;
+
+  /* Brand accents */
+  --color-accent: #22D3EE;
+  --color-accent-hover: #06B6D4;
+  --color-accent-fg: #080C10;
+  --color-accent-light: rgba(34, 211, 238, 0.1);
+  --color-accent-border: rgba(34, 211, 238, 0.3);
+
+  --color-blue: #3B82F6;
+  --color-blue-hover: #2563EB;
+  --color-blue-light: rgba(59, 130, 246, 0.12);
+  --color-blue-border: rgba(59, 130, 246, 0.3);
+
+  /* Feedback & semantic statuses */
+  --color-danger: #EF4444;
+  --color-danger-hover: #DC2626;
+  --color-danger-bg: rgba(239, 68, 68, 0.12);
+  --color-danger-border: rgba(239, 68, 68, 0.35);
+
+  --color-success: #10B981;
+  --color-success-bg: rgba(16, 185, 129, 0.12);
+  --color-success-border: rgba(16, 185, 129, 0.35);
+
+  --color-warning: #F59E0B;
+  --color-warning-bg: rgba(245, 158, 11, 0.12);
+  --color-warning-border: rgba(245, 158, 11, 0.35);
 }
 
 /* Reset & base */
@@ -46,45 +60,61 @@
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  color-scheme: dark;
 }
 
 body {
   background-color: var(--color-bg);
   color: var(--color-text-primary);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* Focus styles for keyboard navigation */
+/* High-contrast focus states for accessible keyboard navigation */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
-  border-radius: 4px;
 }
 
-/* Custom scrollbar */
+/* Form controls reset */
+input,
+select,
+textarea {
+  color-scheme: dark;
+}
+
+/* Refined custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-border);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-muted);
+  background: var(--color-border-hover);
 }
 
-/* Smooth transitions */
-input,
-select,
-textarea,
-button {
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Spinner animation */

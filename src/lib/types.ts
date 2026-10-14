@@ -36,11 +36,11 @@ export const STATUS_CONFIG: Record<
   ApplicationStatus,
   { label: string; color: string; bgColor: string }
 > = {
-  applied: { label: "Applied", color: "text-blue-700", bgColor: "bg-blue-50 border-blue-200" },
-  shortlisted: { label: "Shortlisted", color: "text-amber-700", bgColor: "bg-amber-50 border-amber-200" },
-  interview: { label: "Interview", color: "text-purple-700", bgColor: "bg-purple-50 border-purple-200" },
-  selected: { label: "Selected", color: "text-emerald-700", bgColor: "bg-emerald-50 border-emerald-200" },
-  rejected: { label: "Rejected", color: "text-neutral-500", bgColor: "bg-neutral-50 border-neutral-200" },
+  applied: { label: "Applied", color: "text-cyan-300", bgColor: "bg-cyan-950/70 border-cyan-800/80" },
+  shortlisted: { label: "Shortlisted", color: "text-amber-300", bgColor: "bg-amber-950/70 border-amber-800/80" },
+  interview: { label: "Interview", color: "text-violet-300", bgColor: "bg-violet-950/70 border-violet-800/80" },
+  selected: { label: "Selected", color: "text-emerald-300", bgColor: "bg-emerald-950/70 border-emerald-800/80" },
+  rejected: { label: "Rejected", color: "text-slate-300", bgColor: "bg-slate-900/90 border-slate-700/80" },
 };
 
 /** Team-specific questions */

@@ -30,20 +30,20 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {error && (
         <div
-          className="p-3 rounded-lg border bg-red-50 border-red-200 text-red-800
-            dark:bg-red-950 dark:border-red-800 dark:text-red-200 text-sm"
+          className="p-3.5 rounded-lg border bg-red-950/60 border-red-800 text-red-200 text-sm font-medium flex items-center gap-2"
           role="alert"
         >
-          {error}
+          <span aria-hidden="true">⚠</span>
+          <span>{error}</span>
         </div>
       )}
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium mb-1.5">
-          Email
+        <label htmlFor="email" className="block text-sm font-medium text-[var(--color-text-primary)] mb-1.5">
+          Coordinator Email
         </label>
         <input
           id="email"
@@ -52,15 +52,15 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
           required
           autoComplete="email"
           placeholder="coordinator@rbu.edu"
-          className="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm
-            bg-[var(--color-surface)] text-[var(--color-text-primary)]
+          className="w-full min-h-[44px] px-3.5 rounded-lg border border-[var(--color-border)] text-base sm:text-sm
+            bg-[var(--color-surface-raised)] text-[var(--color-text-primary)]
             placeholder:text-[var(--color-text-muted)]
-            focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent"
+            focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent transition-colors"
         />
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium mb-1.5">
+        <label htmlFor="password" className="block text-sm font-medium text-[var(--color-text-primary)] mb-1.5">
           Password
         </label>
         <input
@@ -70,20 +70,20 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
           required
           autoComplete="current-password"
           placeholder="••••••••"
-          className="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm
-            bg-[var(--color-surface)] text-[var(--color-text-primary)]
+          className="w-full min-h-[44px] px-3.5 rounded-lg border border-[var(--color-border)] text-base sm:text-sm
+            bg-[var(--color-surface-raised)] text-[var(--color-text-primary)]
             placeholder:text-[var(--color-text-muted)]
-            focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent"
+            focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent transition-colors"
         />
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-10 rounded-lg bg-[var(--color-accent)] text-white text-sm font-medium
-          hover:bg-[var(--color-accent-hover)] transition-colors
+        className="w-full min-h-[44px] rounded-lg bg-[var(--color-accent)] text-[var(--color-accent-fg)] text-sm font-semibold
+          hover:bg-[var(--color-accent-hover)] transition-colors shadow-sm
           disabled:opacity-50 disabled:cursor-not-allowed
-          inline-flex items-center justify-center gap-2"
+          inline-flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
       >
         {loading && (
           <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
@@ -91,7 +91,7 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
           </svg>
         )}
-        {loading ? "Signing in…" : "Sign In"}
+        {loading ? "Authenticating…" : "Sign In to Workspace"}
       </button>
     </form>
   );
